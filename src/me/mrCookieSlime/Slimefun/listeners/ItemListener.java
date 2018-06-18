@@ -352,7 +352,13 @@ public class ItemListener implements Listener {
 
 	@EventHandler
     public void onCraft(CraftItemEvent e) {
+		
+		
         for (ItemStack item: e.getInventory().getContents()) {
+        	
+        	SlimefunItem sfItem = SlimefunItem.getByItem(item);
+        	
+        	if ((sfItem instanceof VanillaItem) && SlimefunManager.isItemSimiliar(item, item, true)) return;
         	if (SlimefunItem.getByItem(item) != null && !(SlimefunItem.getByItem(item).isReplacing())) {
         		e.setCancelled(true);
         		Messages.local.sendTranslation((Player) e.getWhoClicked(), "workbench.not-enhanced", true);
@@ -381,8 +387,10 @@ public class ItemListener implements Listener {
 	@EventHandler
     public void onAnvil(InventoryClickEvent e) {
         if (e.getRawSlot() == 2 && e.getWhoClicked() instanceof Player && e.getInventory().getType() == InventoryType.ANVIL) {
-		if (SlimefunManager.isItemSimiliar(e.getInventory().getContents()[0], SlimefunItems.ELYTRA, true)) return;
-
+        	
+        	SlimefunItem sfItem = SlimefunItem.getByItem(e.getInventory().getContents()[0]);
+        	
+        	if ((sfItem instanceof VanillaItem) && SlimefunManager.isItemSimiliar(e.getInventory().getContents()[0], e.getInventory().getContents()[0], true)) return;
         	if (SlimefunItem.getByItem(e.getInventory().getContents()[0]) != null && !SlimefunItem.isDisabled(e.getInventory().getContents()[0])) {
             	e.setCancelled(true);
                 Messages.local.sendTranslation((Player) e.getWhoClicked(), "anvil.not-working", true);
